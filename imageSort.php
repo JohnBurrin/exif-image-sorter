@@ -32,27 +32,27 @@ if (is_dir(IMPORT_FOLDER)) {
     }
 }
 
-if (isset($list_of_files) && \is_array($list_of_files)) {
+if (isset($list_of_files) && is_array($list_of_files)) {
     foreach ($list_of_files as $each_file) {
         $each_file = chop($each_file);
         $path_info = pathinfo($each_file);
         log_message("Processing $each_file\n");
-        if (\file_exists($each_file)) {
+        if (file_exists($each_file)) {
             // if we can get a date from exif overwrite the date
-            if (\in_array(\strtolower($path_info['extension']), $exif_image_types)) {
-                $date = \fetchExif($each_file);
+            if (in_array(strtolower($path_info['extension']), $exif_image_types)) {
+                $date = fetchExif($each_file);
                 if (!$date) {
-                    $date = \date("Y:m:d 00:0000", \filectime($each_file));
+                    $date = date("Y:m:d 00:0000", filectime($each_file));
                     log_message("No date in EXIF data in file $each_file so using files timestamp - $date\n");
                 }
 
-                $current_working_directory = \createFolder($date);
+                $current_working_directory = createFolder($date);
                 log_message("Current Working directory $current_working_directory\n");
 
-                if (ALLOW_OVERWRITE === FALSE && \file_exists($current_working_directory . "/" . $path_info['basename'])) {
+                if (ALLOW_OVERWRITE === FALSE && file_exists($current_working_directory . "/" . $path_info['basename'])) {
                     log_message("File exists. Skipping $current_working_directory/{$path_info['basename']}\n");
                     copy("$each_file", "$current_working_directory/{$path_info['basename']}");
-                } elseif (ALLOW_OVERWRITE === TRUE && \file_exists($current_working_directory . "/" . $path_info['basename'])) {
+                } elseif (ALLOW_OVERWRITE === TRUE && file_exists($current_working_directory . "/" . $path_info['basename'])) {
 
                     log_message("File Exists Overwriting. $current_working_directory/{$path_info['basename']}\n");
                     log_message("Command used 'copy(\"$each_file\", \"$current_working_directory/{$path_info['basename']}\");'\n");
@@ -66,8 +66,8 @@ if (isset($list_of_files) && \is_array($list_of_files)) {
                 
             } else {
                 log_message("{$path_info['extension']} for $each_file is not in the valid extensions list\n");
-                $date = \date("Y:m:d 00:0000", \filectime($each_file));
-                $current_working_directory = \createFolder($date);
+                $date = date("Y:m:d 00:0000", filectime($each_file));
+                $current_working_directory = createFolder($date);
                 copy("$each_file", "$current_working_directory/{$path_info['basename']}");
             }
             if (ALLOW_DELETE === TRUE) {

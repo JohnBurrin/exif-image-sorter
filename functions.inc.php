@@ -12,9 +12,9 @@ function fetchExif($filepath) {
     }
     $fileName = chop($filepath);
     if (is_file($fileName)) {
-        $exif = \exif_read_data($fileName, "EXIF", \TRUE);
+        $exif = xif_read_data($fileName, "EXIF", TRUE);
         if ($exif) {
-            return \process_exif($exif,"DateTimeOriginal");
+            return process_exif($exif,"DateTimeOriginal");
         }
         if (DEBUG === TRUE) {
             print "This image has no EXIF data\n";
