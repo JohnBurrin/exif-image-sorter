@@ -12,7 +12,7 @@ function fetchExif($filepath) {
     }
     $fileName = chop($filepath);
     if (is_file($fileName)) {
-        $exif = xif_read_data($fileName, "EXIF", TRUE);
+        $exif = exif_read_data($fileName, "EXIF", TRUE);
         if ($exif) {
             return process_exif($exif,"DateTimeOriginal");
         }
